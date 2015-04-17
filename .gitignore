@@ -1,3 +1,6 @@
+## Generated figure PDF-files
+figures/*.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

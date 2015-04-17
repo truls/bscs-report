@@ -1,0 +1,80 @@
+\documentclass[a4paper]{memoir}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[urw-garamond]{mathdesign}
+
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{graphics}
+\usepackage[size=small,labelfont=bf]{caption}
+
+
+
+
+\usepackage[backend=biber,backref=true]{biblatex}
+
+% Convert our figures
+\immediate\write18{make svgfigures}
+
+\title{Implementing high performance Synchronous Message Exchange\\
+       University of Copenhagen}
+\author{Truls Asheim}
+
+
+
+\begin{document}
+\maketitle
+
+
+\begin{abstract}
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
+  laoreet lobortis erat, ac fringilla quam accumsan ut. Nam eget
+  tortor neque. Nulla dictum dapibus venenatis. Vestibulum interdum
+  sem vestibulum enim vulputate ullamcorper nec ut velit. Suspendisse
+  rhoncus a nisi eget viverra. Curabitur porttitor hendrerit elit vel
+  porta. Phasellus elementum nulla aliquet, rhoncus sapien sit amet,
+  maximus libero. Morbi ipsum sapien, faucibus et tempor sed, commodo
+  at enim. Curabitur maximus pretium felis, ac elementum nisi
+  tincidunt et. Sed facilisis lacus purus, sit amet blandit elit
+  ultricies sit amet. Maecenas et cursus libero, ac tincidunt arcu. In
+  at tincidunt ante. Pellentesque lacinia dui nec nulla accumsan,
+  auctor faucibus elit suscipit. Pellentesque quis justo turpis.
+
+  Praesent in dignissim lacus, in auctor felis. Phasellus iaculis
+  finibus sapien, vitae vestibulum leo rutrum ac. Etiam in tellus eget
+  sapien suscipit ornare eget sit amet lectus. Vestibulum sagittis
+  consectetur varius. Aenean consectetur ante quis dui iaculis
+  fringilla. Etiam enim sem, facilisis et interdum sit amet, congue
+  nec metus. Fusce eu imperdiet enim, non sollicitudin sem. Vestibulum
+  malesuada mattis justo, vel dictum massa tristique ac. Vivamus
+  pretium turpis ut ligula porta, eget facilisis eros pulvinar. Aenean
+  elit mi, semper vitae ornare vel, pretium sit amet ex. Cras commodo
+  justo quis dolor gravida auctor. Vivamus ultrices arcu dolor, vitae
+  porta ante viverra et. Quisque at aliquet massa, vel gravida
+  felis. Donec eu imperdiet mi. Aliquam in tortor a libero iaculis
+  luctus.
+\end{abstract}
+
+\clearpage
+\tableofcontents\clearpage
+\listoffigures\clearpage
+\listoftables
+%\listoflistings
+
+\include{introduction}
+\include{analysis}
+\include{implementation}
+\include{discussion}
+\include{conclusion}
+
+\appendix
+\include{appendix}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-command-extra-options: "-enable-write18"
+%%% End:
