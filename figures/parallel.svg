@@ -13,7 +13,7 @@
    height="1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="parallel.svg">
   <defs
      id="defs4">
@@ -157,8 +157,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="67.668179"
-     inkscape:cy="768.93679"
+     inkscape:cx="267.66818"
+     inkscape:cy="683.2225"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -179,7 +179,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -195,18 +195,19 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot2989"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(17.172593,-13.131983)"><flowRegion
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(25.744022,-13.131983)"><flowRegion
          id="flowRegion2991"><rect
            id="rect2993"
            width="53.538086"
            height="56.568542"
            x="82.832512"
-           y="572.53973" /></flowRegion><flowPara
+           y="572.53973"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;writing-mode:lr-tb;text-anchor:start" /></flowRegion><flowPara
          id="flowPara2995"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic;font-size:20px">t<flowSpan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;writing-mode:lr-tb;text-anchor:start">t<flowSpan
    style="font-size:65%;baseline-shift:sub"
-   id="flowSpan6244">1</flowSpan></flowPara></flowRoot>    <path
+   id="flowSpan4302">1</flowSpan></flowPara></flowRoot>    <path
        style="fill:none;stroke:#000000;stroke-width:0.8994205px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#StopL);marker-mid:none;marker-end:url(#StopL)"
        d="m 182.11173,194.99973 0,356.28618"
        id="path2987-8"
@@ -219,36 +220,38 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot2989-3"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:20px;font-style:italic;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;"
        transform="translate(89.92261,-11.056993)"><flowRegion
          id="flowRegion2991-0"><rect
            id="rect2993-3"
            width="53.538086"
            height="56.568542"
            x="82.832512"
-           y="572.53973" /></flowRegion><flowPara
+           y="572.53973"
+           style="-inkscape-font-specification:'GaramondNo8, Italic';font-family:GaramondNo8;font-weight:normal;font-style:italic;font-stretch:normal;font-variant:normal;font-size:20px;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;" /></flowRegion><flowPara
          id="flowPara2995-4"
-         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic;font-size:20px">t<flowSpan
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';font-size:20px;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;">t<flowSpan
    style="font-size:65%;baseline-shift:sub"
-   id="flowSpan6246">2</flowSpan></flowPara></flowRoot>    <flowRoot
+   id="flowSpan4304">2</flowSpan></flowPara></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot2989-4"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       transform="translate(203.8871,-12.087451)"><flowRegion
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="translate(223.17281,-12.087451)"><flowRegion
          id="flowRegion2991-5"><rect
            id="rect2993-9"
            width="53.538086"
            height="56.568542"
            x="82.832512"
-           y="572.53973" /></flowRegion><flowPara
+           y="572.53973"
+           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;writing-mode:lr-tb;text-anchor:start" /></flowRegion><flowPara
          id="flowPara2995-1"
-         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic">t<flowSpan
-   style="font-size:65.00091553%;baseline-shift:sub"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;writing-mode:lr-tb;text-anchor:start">t<flowSpan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-align:start;writing-mode:lr-tb;baseline-shift:sub;text-anchor:start"
    id="flowSpan6248">i</flowSpan></flowPara></flowRoot>    <g
        id="g6061"
        transform="translate(-230,35)">
       <path
-         d="m 460,337.36218 c 0,2.76143 -2.23858,5 -5,5 -2.76142,0 -5,-2.23857 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+         d="m 460,337.36218 a 5,5 0 0 1 -5,5 5,5 0 0 1 -5,-5 5,5 0 0 1 5,-5 5,5 0 0 1 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="337.36218"
@@ -257,7 +260,7 @@
          style="fill:#404040;fill-opacity:1;stroke:none"
          sodipodi:type="arc" />
       <path
-         d="m 460,337.36218 c 0,2.76143 -2.23858,5 -5,5 -2.76142,0 -5,-2.23857 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+         d="m 460,337.36218 a 5,5 0 0 1 -5,5 5,5 0 0 1 -5,-5 5,5 0 0 1 5,-5 5,5 0 0 1 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="337.36218"
@@ -267,7 +270,7 @@
          sodipodi:type="arc"
          transform="translate(40,0)" />
       <path
-         d="m 460,337.36218 c 0,2.76143 -2.23858,5 -5,5 -2.76142,0 -5,-2.23857 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+         d="m 460,337.36218 a 5,5 0 0 1 -5,5 5,5 0 0 1 -5,-5 5,5 0 0 1 5,-5 5,5 0 0 1 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="337.36218"
@@ -370,39 +373,37 @@
        y="483.66257" />
     <text
        xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="78.571426"
-       y="215.21931"
+       style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="81.428566"
+       y="216.64789"
        id="text6238"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan6240"
-         x="78.571426"
-         y="215.21931"
-         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic">p<tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
+         x="81.428566"
+         y="216.64789"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8 Italic'">p<tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65.00091553%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8 Italic';baseline-shift:sub"
    id="tspan6250">1,1</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="76.450439"
+       style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="80.021866"
        y="357.75699"
        id="text6238-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan6240-2"
-         x="76.450439"
+         x="80.021866"
          y="357.75699"
-         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic">p<tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan6305">1,</tspan><tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan6276">2</tspan></tspan></text>
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8 Italic'">p<tspan
+   style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:65.00091553%;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8 Italic';baseline-shift:sub"
+   id="tspan6305">1,2</tspan></tspan></text>
     <g
        id="g6061-1"
        transform="matrix(0,0.5,-0.5,0,257.18109,209.6479)">
       <path
-         d="m 460,337.36218 c 0,2.76143 -2.23858,5 -5,5 -2.76142,0 -5,-2.23857 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+         d="m 460,337.36218 a 5,5 0 0 1 -5,5 5,5 0 0 1 -5,-5 5,5 0 0 1 5,-5 5,5 0 0 1 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="337.36218"
@@ -411,7 +412,7 @@
          style="fill:#404040;fill-opacity:1;stroke:none"
          sodipodi:type="arc" />
       <path
-         d="m 460,337.36218 c 0,2.76143 -2.23858,5 -5,5 -2.76142,0 -5,-2.23857 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+         d="m 460,337.36218 a 5,5 0 0 1 -5,5 5,5 0 0 1 -5,-5 5,5 0 0 1 5,-5 5,5 0 0 1 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="337.36218"
@@ -421,7 +422,7 @@
          sodipodi:type="arc"
          transform="translate(40,0)" />
       <path
-         d="m 460,337.36218 c 0,2.76143 -2.23858,5 -5,5 -2.76142,0 -5,-2.23857 -5,-5 0,-2.76142 2.23858,-5 5,-5 2.76142,0 5,2.23858 5,5 z"
+         d="m 460,337.36218 a 5,5 0 0 1 -5,5 5,5 0 0 1 -5,-5 5,5 0 0 1 5,-5 5,5 0 0 1 5,5 z"
          sodipodi:ry="5"
          sodipodi:rx="5"
          sodipodi:cy="337.36218"
@@ -433,23 +434,21 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="71.048889"
-       y="536.95154"
+       style="font-style:normal;font-weight:normal;font-size:32px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="76.048889"
+       y="534.09442"
        id="text6238-1-5"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan6240-2-2"
-         x="71.048889"
-         y="536.95154"
-         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic">p<tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan6338">1</tspan><tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan6336">,j</tspan></tspan></text>
+         x="76.048889"
+         y="534.09442"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8 Italic'">p<tspan
+   style="font-size:64.99999762%;baseline-shift:sub"
+   id="tspan3437">1,j</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:20px;font-style:italic;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;"
        x="321.9566"
        y="213.38014"
        id="text6238-9"
@@ -458,12 +457,12 @@
          id="tspan6240-8"
          x="321.9566"
          y="213.38014"
-         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic">p<tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan6250-0">i,j</tspan></tspan></text>
+         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;">p<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan3431">i,j</tspan></tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:20px;font-style:italic;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;"
        x="321.90649"
        y="517.2373"
        id="text6238-9-0"
@@ -472,8 +471,8 @@
          id="tspan6240-8-4"
          x="321.90649"
          y="517.2373"
-         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Serif;-inkscape-font-specification:DejaVu Serif Italic">f<tspan
-   style="font-size:65.00091553%;baseline-shift:sub"
-   id="tspan6250-0-7">i</tspan></tspan></text>
+         style="font-size:20px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:GaramondNo8;-inkscape-font-specification:'GaramondNo8, Italic';text-anchor:start;text-align:start;writing-mode:lr;line-height:125%;">f<tspan
+   style="font-size:65%;baseline-shift:sub"
+   id="tspan3433">i</tspan></tspan></text>
   </g>
 </svg>

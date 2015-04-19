@@ -3,28 +3,39 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[urw-garamond]{mathdesign}
+\usepackage{minted}
+\usepackage{graphicx}
+\usepackage[status=draft]{fixme}
+\usepackage{cleveref}
 
-\usepackage{listings}
+\usepackage[
+  backend=biber,
+  backref=true,
+  style=authoryear,
+  citestyle=authoryear]{biblatex}
+\addbibresource{citations.bib}
+
 \usepackage{hyperref}
-\usepackage{graphics}
-\usepackage[size=small,labelfont=bf]{caption}
-
-
-
-
-\usepackage[backend=biber,backref=true]{biblatex}
 
 % Convert our figures
 \immediate\write18{make svgfigures}
 
+% Set up captions
+\captionnamefont{\small\bfseries}
+\captiontitlefont{\small}
+\captionwidth{0.8\linewidth}
+
+\fxsetup{margin}
+
 \title{Implementing high performance Synchronous Message Exchange\\
        University of Copenhagen}
-\author{Truls Asheim}
-
-
+\author{Truls Asheim \texttt{<truls@asheim.dk>}}
+\date{}
 
 \begin{document}
+\begin{titlingpage}
 \maketitle
+\end{titlingpage}
 
 
 \begin{abstract}
@@ -38,8 +49,8 @@
   at enim. Curabitur maximus pretium felis, ac elementum nisi
   tincidunt et. Sed facilisis lacus purus, sit amet blandit elit
   ultricies sit amet. Maecenas et cursus libero, ac tincidunt arcu. In
-  at tincidunt ante. Pellentesque lacinia dui nec nulla accumsan,
-  auctor faucibus elit suscipit. Pellentesque quis justo turpis.
+  at tincidunt ante. Pellentesque lacinia dui nec nulla accumsan
+  auctor faucibus elit suscipit. Pellentesque quis justo turpiso.
 
   Praesent in dignissim lacus, in auctor felis. Phasellus iaculis
   finibus sapien, vitae vestibulum leo rutrum ac. Etiam in tellus eget
@@ -67,6 +78,8 @@
 \include{implementation}
 \include{discussion}
 \include{conclusion}
+
+\printbibliography
 
 \appendix
 \include{appendix}

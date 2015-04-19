@@ -1,6 +1,9 @@
 ## Generated figure PDF-files
 figures/*.pdf
 
+## Dunno WTF this is
+auto/*
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
