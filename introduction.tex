@@ -2,14 +2,42 @@
 
 \section{Project description}
 In this report, we describe the design and implementation of a highly
-efficient library for parallel execution of SME networks.
+efficient library for parallel execution of new, globally synchronous,
+message passing framework called Synchronous Message Exchange
+(SME). We will
 
 In this report, we describe a synchronous message passing framework
 intended to aid simulation of applications whose operating semantics
 are compatible with the SME model
 
-\section{Motivation}
-Why is this awesome?
+\section{Hardware Description Languages}
+A Hardware Description Language (HDL) is a programming language for
+describing hardware designs. A program written in such a language is
+usually
+
+\section{Background and Motivation}
+Field-programmable Gate Arrays (FPGA) provides several advantages over
+using GPGPUS for processing work including a significantly improved
+performance-per-watt ratio. Due to the low-level nature of current
+tools for programming FPGAs, their use are largely restricted to
+engineers with working knowledge in the field of hardware design. In
+order for software developers to take advantage of FPGAs, improved
+high-level hardware design utilities are required \cite{bacon2013fpga}.
+
+The creation of SME was motivated by attempts to use CSP for modeling
+hardware which, for simple cases, proved successful
+\cite{rehr2013bpu}, but additional testing revealed that the CSP model
+introduced a significant overhead when simulating more complicated
+hardware designs. Modeling the clock-cycle driven global synchrony
+that exists in hardware proved to be particularly difficult with CSP
+and required the introduction of several additional processes and
+channels. This added complexity reduced simulation performance and
+limited the usefulness of the CSP-based hardware design model \cite{vinter2014synchronous}.
+
+SME is an attempt to provide a programming framework that, while
+leveraging and maintaining the properties of CSP that proved useful
+and f enforcing a hardware-like paradigm, that is accessible to
+software developers. By \cite{vinter2014synchronous}
 
 \section{Limitations}
 This report will not discuss details related to design of hardware

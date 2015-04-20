@@ -1,4 +1,4 @@
-\documentclass[a4paper]{memoir}
+\documentclass[a4paper,11pt]{memoir}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -6,16 +6,26 @@
 \usepackage{minted}
 \usepackage{graphicx}
 \usepackage[status=draft]{fixme}
-\usepackage{cleveref}
+\usepackage{amsthm}
+\usepackage{xcolor}
 
 \usepackage[
   backend=biber,
   backref=true,
-  style=authoryear,
-  citestyle=authoryear]{biblatex}
+  style=numeric,
+  citestyle=numeric]{biblatex}
 \addbibresource{citations.bib}
 
-\usepackage{hyperref}
+\definecolor{mycolor1}{HTML}{00507E}
+\usepackage[
+  pdfauthor={Truls Asheim},
+  pdftitle={Implementing High Peformance Synchronous Message Exchange},
+  colorlinks=true,
+  linkcolor=mycolor1,
+  citecolor=mycolor1,
+  urlcolor=mycolor1,
+  filecolor=mycolor1]{hyperref}
+\usepackage[noabbrev,nameinlink]{cleveref}
 
 % Convert our figures
 \immediate\write18{make svgfigures}
@@ -25,7 +35,13 @@
 \captiontitlefont{\small}
 \captionwidth{0.8\linewidth}
 
+% enumerate subsections
+\setsecnumdepth{subsection}
+
 \fxsetup{margin}
+
+\theoremstyle{definition}
+\newtheorem{property}{Property}
 
 \title{Implementing high performance Synchronous Message Exchange\\
        University of Copenhagen}
@@ -33,6 +49,7 @@
 \date{}
 
 \begin{document}
+
 \begin{titlingpage}
 \maketitle
 \end{titlingpage}
@@ -69,9 +86,7 @@
 
 \clearpage
 \tableofcontents\clearpage
-\listoffigures\clearpage
-\listoftables
-%\listoflistings
+\listoffigures
 
 \include{introduction}
 \include{analysis}

@@ -1,56 +1,93 @@
 \chapter{Analysis and Design}
 
-\section{Motivation}
-
 \section{Synchronous Message Exchange}
+The system that we will discuss in this report is called Synchronous Message Exchange
 
 \subsection{Components}
-
-In this section, we describe the various components that make up the
-a SME network.
+Compared to CSP, a much smaller and simpler set of components are used
+to model the process network. In this section, we describe those
+components and their
 
 \begin{description}
-  \item[Process] 
+  \item[Process] A process is an execution unit performing a unit of
+    work
+  \item[Bus] A bus enables communication between two processes and
+    should be considered analogous to buses found in actual
+    hardware. As such, they can only be written to or read from once
+    per clock cycle.
 \end{description}
 
 \subsection{Properties}
 The SME model has a number of special properties which influences how
 to efficiently represent and execute the network in our implementation.
 
-\begin{description}
+%\begin{description}
+%  \item[Clock cycles] One defining feature of
+%    hardware is that all processing is driven by a clock beat. In
+%    order to enable fulfillment of this goal we introduce a simulated
+%    clock beat in our implementation of SME and thus the defining
+%    property of hardware is preserved in the SME model.
 
-  \item[Clock cycles] One defining feature of
+%  \item[Global synchronicity] As a consequence of implementing the
+%    simulated clock best, all events and communications of the
+%    network occurs completely synchronous from the point of view of a
+%    process. FIXME
+
+%  \item[Shared nothing] A process is completely
+%    autonomous and can only change state through receiving a message
+%    on its incoming bus. A process is also self contained in the sense
+%\end{description}
+
+\begin{property}[Implicit clock] One defining feature of
     hardware is that all processing is driven by a clock beat. In
     order to enable fulfillment of this goal we introduce a simulated
     clock beat in our implementation of SME and thus the defining
     property of hardware is preserved in the SME model.
+\end{property}
 
-  \item[Global synchronicity] As a consequence of implementing the
-    simulated clock best, all events and communications of the
-    network occurs completely synchronous from the point of view of a
-    process. FIXME
+\begin{property}[Global synchrony]
+  % http://eyes4earth.org/2014/11/synchronicity-or-synchrony/
+  \label{synchro}
+  As a consequence of implementing the simulated clock best, all
+  events and communications of the network occurs completely
+  synchronous from the point of view of a process. FIXME
+\end{property}
 
-  \item[Shared nothing] A process can be considered a completely
-    autonomous and can only change state through receiving a message
-    on its incoming bus. A process is also self contained in the sense
-\end{description}
+\begin{property}[Shared Nothing]
+  \label{noshare}
+  A process is completely autonomous and can only change state through
+  receiving a message on its incoming bus. A process is also self
+  contained in the sense
+\end{property}
 
-\subsection{Execution model}
-Our execution is derived from the unique properties of the system
+\subsection{Execution flow}
+The execution flow needs to be defined with a focus om preserving the
+actual 
+
+The execution cycle of a SME-process 
+
+
+\begin{figure}
+\centering
+\includegraphics{figures/execution-cycle}
+\label{fig:cycle}
+\caption[Execution flow of a SME-process]{The execution cycle of a
+  SME process visualized as a hardware clock-cycle. Before every cycle
+  data from a input bus is read into the process and after a cycle,
+  data is written back to the gate}
+\end{figure}
 
 \section{Public API}
 The API exposed to the user of the SME library should be designed with
 a focus on balancing expressiveness and ability to be easily
-understanidble....
+understandable....
 
 The API implemented by \cite{vinter2014synchronous} is heavily
 dependent of the highly dynamic nature of the Python programming
 language used to implement their prototype. Since our implementation
 is written in C++ we cannot directly mimic the python API in our
 implementation. Given the similarities between SME and CSP it seems
-obvious to let us inspire by 
-
-\section{Problem characteristics}
+obvious to let us inspire by
 
 \section{Paralellization model}
 
@@ -63,16 +100,16 @@ instance, user-level threads. \cite{sung2002comparative}\fxnote{Find
   more recent citation for the performance of OS vs. user-level threads}.
 
 Using user-level threads, on linux implemented by using the (now
-deprecated)  \texttt{setjump, longjump} functions or the more current \texttt{
-setcontext, getcontext}, is another possible way of implementing our
-networks. The notion of a user-level thread is highly compatible with
-our concept of a process, namely \fxnote{finish}. User-level threads is the
-method that is used to implement many CSP libraries, including
-C++CSP2.
+deprecated) \texttt{setjump, longjump} functions or the more current
+\texttt{ setcontext, getcontext} functions, is another possible way of
+implementing our networks. The notion of a user-level thread is highly
+compatible with our concept of a process, namely
+\fxnote{finish}. User-level threads is the method that is used to
+implement many CSP libraries, including C++CSP2.
 
 One important difference between the CSP and SME execution models is
-that CSP is highly asynchronous in nature while SME is, as previously
-mentioned, entirely synchronous. This allows us to take a
+that CSP is asynchronous and event-driven in nature while SME is, as
+previously mentioned, entirely synchronous. This allows us to take a
 significantly more simple approach to scheduling threads compared to
 C++CSP. A parallel CSP library needs to schedule a process for
 execution based on events generated by other processes
@@ -83,12 +120,12 @@ SME.
 
 Based on this, we propose an extremely and efficient model for
 parallel execution of a SME process network illustrated
-in. \fxnote{make figure similar to \cref{fig:subopt-dist}}. The idea
-is to start one OS-level thread per available CPU-core and assign a
+in. \fxnote{make figure similar to \Cref{fig:suboptdist}}. The idea is
+to start one OS-level thread per available CPU-core and assign a
 subset of SME processes to each code. Then, for each iteration of the
 SME-network \fxnote{Define ``iteration of SME-network'' as a full
-clock-cycle of the simulated hardware or replace with different
-term}, the controlling thread will start by 
+  clock-cycle of the simulated hardware or replace with different
+  term}, the controlling thread will start by
 
 
 
@@ -96,7 +133,7 @@ term}, the controlling thread will start by
 In order to determine the efficiency of various methods of process
 scheduling we need to identify the optimality condition for our
 process scheduling. An illustration of our threading model can be seen in
-\cref{fig:subopt-dist}. The green boxes represents processes while the
+\cref{fig:suboptdist}. The green boxes represents processes while the
 red boxes indicates core idle time. Notice, how we by redistributing
 the processes across threads could reduce the idle-time of our
 cores.
@@ -111,32 +148,75 @@ cores.
   thread the process has been assigned to and $f_i$ is the combined
   idle time for each thread. Threads are named $t_i$.}
 
-\label{fig:subopt-dist}
+\label{fig:suboptdist}
 
 \end{figure}
 
 \section{Process orchestration}
 As we discussed in the previous section, the primary limiting factor
 for our multi-threaded network is an uneven and suboptimal
-distribution of processes across CPU-cores. If orchestration is
-determined by the order of which processes were defined
+distribution of processes across CPU-cores. If no attempt is made to
+optimize process distribution, the order of process execution will
+depend on the order of which processes are defined in the source
+code. Due to \cref{noshare} and \cref{synchro} of SME
+networks there is no scenario where it would be necessary or
+beneficial for a programmer to exercise ultimate control over the
+order of process execution. Therefore, maximizing CPU-core utilization
+would be an unreasonable burden to put on the programmer, especially
+since their optimization efforts would be specific to a certain number
+of CPU-cores.
 
-The optimal way to do this depend
+However, the process of orchestrating processes comes at a
+computational cost which must weighted against the potential reduction
+of core idle-time.
 
-\section{One-shot process orchestration}
+The optimal method and timing of process orchestration depends on the
+dynamicity \fxnote{is predictability a better word?} of the work
+performed by the network we are executing. A network where each
+process performs a fixed amount of work per iteration will only need
+to be orchestrated once, while a network where the workload of the
+processes are variable will need to be continuously evaluated at
+runtime in order to maintain our optimality condition. These various
+methods will be discussed for the remainder of this section.
+
+\fxnote{Discuss/investigate problem of
+  ``optimization-looping''. Imagine a network where the execution time
+  of each process is completely random. This would most likely trigger
+  a reorchestration after every iteration which may end up taking more
+  CPU-time than the actual process execution.}
+
+\subsection{Round-robin orchestration}
+\begin{figure}
+\centering
+\includegraphics{figures/roundrobin}
+
+\caption[Round-robin orchestration]{Illustration of round-robin
+  process orchestration. Progressive iterations are shown as
+  increasing color intensity of arrows}
+
+\label{fig:roundrobin}
+
+\end{figure}
+
+
+Processes will be executed on the first available core as seen in
+\cref{fig:roundrobin}
+
+
+\subsection{One-shot process orchestration}
 In this model, we orchestrate the processes in our network as soon as
 possible after execution start and
 
-\section{Monte Carlo orchestration}
+\subsection{Monte Carlo orchestration}
 In this approach, we simply randomize the order of the processes. The
 main advantage of this approach is that is computationally cheap
-compared to 
+compared to
 
-\section{Optimization-based orchestration}
-Another way to orchestrate the processes is to use a 
+\subsection{Optimization-based orchestration}
+Another way to orchestrate the processes is to use a
 
 
-\section{Adaptive process orchestration}
+\subsection{Adaptive process orchestration}
 The benefits of using a oneshot orchestration approach diminishes when
 we execute process networks where the processes performs a variable
 amount of work per iteration. In these kinds of networks, CPU-core
@@ -144,12 +224,12 @@ load distribution will gradually become uneven and suboptimal as the
 network execution progresses. In order to keep this from happening and
 maximize CPU-core utilization, we need to monitor process execution
 time and core idle time as the network execution progresses. This is
-what we refer to as adaptive orchestration. This approach, however
-introduces another trade-off that we need to consider. producing an 
+what we refer to s adaptive orchestration. This approach, however
+introduces another trade-off that we need to consider. producing an
 
-\section{Adaptive Monte Carlo process orchestration}
+\subsection{Adaptive Monte Carlo process orchestration}
 
-\section{Adaptive Optimization-based process orchestration}
+\subsection{Adaptive Optimization-based process orchestration}
 
 
 
