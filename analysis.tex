@@ -1,9 +1,7 @@
 \chapter{Analysis and Design}
-This chapter will describe, not only the final design, but also the
-considerations that went into the designs and ideas that was discarded
-during the process.
-n
-
+In this chapter, we will describe and justify the design of our library and the
+thought and considerations that went into producing the final design
+and ideas that was discarded along the way.
 
 \section{Overall goal and success parameters}
 
@@ -32,26 +30,27 @@ regards to context switching penalty and memory cost. Due to these
 limitations, implementing these kinds of message passing systems using
 only OS-level threads are generally not feasible. Therefore,
 user-level threads are used by other message passing systems such as
-the C++CSP2 library and the goroutines in the Go language.  However,
-user-level threads are complicated to implement since we need to
-implement a scheduler which preempts \fxnote{CSP probably isn't
-  preemtive} running processes and schedules them on top of OS-level
-threads.
-
+the C++CSP library\cite{brown2003introduction} and the goroutines in
+the Go language\cite{deshpandeanalysis}. However, implementing a
+user-level threading library would add complexity to our
+program since we would need to implement a scheduler, for scheduling
+processes on top of OS-level threads.
 
 Comparing, once again, to CSP, the concurrency in CSP is inherently
 asynchronous while SME is entirely synchronous in nature. This means
 that a CSP library needs to implement a scheduler which decides when
 to give control to a process based on certain events, e.g. a process
 wishing to communicate or a process receiving a message from another
-process.
+process. \fxnote{Repeats some of previous paragraph}.
 
-Due to the enforced synchrony of SME we don't have the same need to
-schedule processes ``intelligently''. We know that all processes need
-to run during a cycle and all busses have to propagate their
-values. By additionally taking into account he shared nothing property
-of SME, we can paralellize SME using a much simpler model compared to
-the aforementioned message passing network implementations:
+Our original design considerations centered around such a design,
+however, due to the enforced synchrony of SME we don't have the same
+need to schedule processes ``intelligently''. We know that all
+processes needs to run during a cycle and all busses have to propagate
+their values. This, in addition to he shared nothing property of SME,
+allows us to specify a much simpler parallelization model for SME
+compared to the techniques used by the aforementioned message passing
+network implementations:
 
 The basic idea that we base our design on is conceptually similar to a
 classic producer-consumer setup. In our case, the work ``produced'' is
@@ -60,7 +59,11 @@ executing the processes. In this setup, a process is run simply by
 calling a function, whereas user-level threads are usually implemented
 using the \texttt{setcontext} and \texttt{getcontext} library
 functions, which, while extremely fast, still causes a slightly larger
-overhead compared to a simple function call.
+overhead compared to a simple function call. \fxnote{Switching between
+  OS-level processes is actually really fast, since context-switching
+  from one process to another usually only involves moving CPU
+  registers, i.e. the stack pointer, to an appropriate location, TODO
+  write something like that}
 
 by simply letting a number of OS-threads run SME processes in a
 worker-consumer like manner. This approach also make it simple enforce
@@ -111,7 +114,7 @@ Overall, we expect the latter model to have a significant advantage in
 executing networks with small processes while the queue-locking cost
 of the former model will perform better when executing networks with
 large or unevenly distributed workloads since the queue-locking costs
-will be amortized and allow its process-interleaving ability to shine
+owill be amortized and allow its process-interleaving ability to shine
 through.
 
 %Using OS-level threads for representing the SME processes was quickly
@@ -161,6 +164,9 @@ processes, due to the shared-nothing property of SME, is embarrassingly
 parallel, the need for synchronization makes it not quite
 so. Therefore, the time spent on synchronization will significantly
 impact the overall performance of our network.
+
+\fxnote{Talk about barriers somewhere, which probably describes some
+  of what we're talking about more accurately}
 
 \begin{enumerate}
 \item In order to know when to stop executing, we need to count the
