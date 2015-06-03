@@ -4,21 +4,22 @@ We have chosen to implement the SME library in the C++ language. C++
 combines the availability of high-level structures, such as classes,
 with the ability to, when needed, assert low-level control over the
 code generated. Furthermore, the C++11 revision of the language allows
-for easy access to features that were previously hard to use. Such
-feature include the <atomics> header which enables the use of atomic
-instructions and enforced memory ordering without the need for inline
-assembly and similar. Having access to atomics is a highly desire able
-feature for us since they can be used as high-performance
-synchronization primitives. Furthermore, classes in C++ are well suited for
-representing SME constructs and specifically, they provide a natural
-enclosure of the state maintained by a SME process.
+for easy access to features that were previously hard to use. as the
+functions provided by the \texttt{<atomics>} header which enables the
+use of atomic instructions and enforced memory ordering without the
+need for inline assembly and similar. Having access to atomics is a
+highly desire able feature for us since they can be used as
+high-performance synchronization primitives. Furthermore, classes in
+C++ are well suited for representing SME constructs and specifically,
+they provide a natural enclosure of the state maintained by a SME
+process.
 
 The library is meant to be imported by applications wishing to take
 advantage of the SME-model.
 
 The implementation was performed in several phases. The initial
 version of the C++SME code was purely single-threaded and was
-implemented to play around with the C++ API's and for defineing the
+implemented to play around with the C++ API's and for defining the
 API used to define SME networks.
 
 Adding support for multi-threading required a lot of the code from the
@@ -37,8 +38,6 @@ orchestration of processes must be performed before the start of
 network execution. Networks that change at runtime is beyond the scope
 of SME since it simply isn't possible in hardware, which SME is
 intended to map \fxnote{rewrite}
-
-Since 
 
 We want the API to be as seamless as possible, that is, it should get
 int he way of the programmer as little as possible. Several phases of
@@ -72,18 +71,19 @@ orchestration is only executed once and thus can be implemented with
 focus on code clarity rather than performance. This 
 
 \section{Public API}
-Boilerplate code is a major annoyance 
+TODO: How the SME constructs are exposed by the framework and which
+operations that can be performed on them.
 
-\section{Testing}
-In order to check that our network works as intended and is able to
-execute a SME network without violating any of the properties of the
-SME model, we have implemented a special \textit{validator network}
-which is design to reveal any inconsistencies arising from
-incohesion\fxnote{is this a word?} with the invariants of the SME
-model.
+%\section{Testing}
+%In order to check that our network works as intended and is able to
+%execute a SME network without violating any of the properties of the
+%SME model, we have implemented a special \textit{validator network}
+%which is design to reveal any inconsistencies arising from
+%incohesion\fxnote{is this a word?} with the invariants of the SME
+%model.
 
-Specifically, the validator network intends to check if all processes
-has been executed during a cycle and b) if all values 
+%Specifically, the validator network intends to check if all processes
+%has been executed during a cycle and b) if all values 
 
 
 %%% Local Variables:

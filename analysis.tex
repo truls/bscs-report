@@ -1,7 +1,7 @@
 \chapter{Analysis and Design}
-In this chapter, we will describe and justify the design of our library and the
-thought and considerations that went into producing the final design
-and ideas that was discarded along the way.
+In this chapter, we will describe and justify the design of our
+library and the thoughts and considerations that went into producing
+the final design and ideas that was discarded along the way.
 
 \section{Overall goal and success parameters}
 
@@ -22,19 +22,19 @@ and ideas that was discarded along the way.
 % obvious to let us inspire by
 
 \section{Paralellization model}
-
 A common way of parallelizing CSP-like networks is to use user-level
 threads to represent a process. In comparison with OS-level threads,
 user-level threads has a significantly lower overhead both with
-regards to context switching penalty and memory cost. Due to these
-limitations, implementing these kinds of message passing systems using
-only OS-level threads are generally not feasible. Therefore,
-user-level threads are used by other message passing systems such as
-the C++CSP library\cite{brown2003introduction} and the goroutines in
-the Go language\cite{deshpandeanalysis}. However, implementing a
-user-level threading library would add complexity to our
-program since we would need to implement a scheduler, for scheduling
-processes on top of OS-level threads.
+regards to context switching penalty \cite{sung2002comparative} and
+memory cost. Due to these limitations, implementing these kinds of
+message passing systems using only OS-level threads are generally not
+feasible. Therefore, user-level threads are used by other message
+passing systems such as the C++CSP library\cite{brown2003introduction}
+and the goroutines in the Go
+language\cite{deshpandeanalysis}. However, implementing a user-level
+threading library would add complexity to our program since we would
+need to implement a scheduler, for scheduling processes on top of
+OS-level threads.
 
 Comparing, once again, to CSP, the concurrency in CSP is inherently
 asynchronous while SME is entirely synchronous in nature. This means
@@ -43,14 +43,14 @@ to give control to a process based on certain events, e.g. a process
 wishing to communicate or a process receiving a message from another
 process. \fxnote{Repeats some of previous paragraph}.
 
-Our original design considerations centered around such a design,
-however, due to the enforced synchrony of SME we don't have the same
-need to schedule processes ``intelligently''. We know that all
-processes needs to run during a cycle and all busses have to propagate
-their values. This, in addition to he shared nothing property of SME,
-allows us to specify a much simpler parallelization model for SME
-compared to the techniques used by the aforementioned message passing
-network implementations:
+Our original design considerations for C++SME centered around such a
+design, however, due to the enforced synchrony of SME we don't have
+the same need to schedule processes ``intelligently'' since we know
+that all processes needs to run during a cycle and all busses have to
+propagate their values. This, in addition to he shared nothing
+property of SME, allows us to specify a much simpler parallelization
+model for SME compared to the techniques used by the aforementioned
+message passing network implementations:
 
 The basic idea that we base our design on is conceptually similar to a
 classic producer-consumer setup. In our case, the work ``produced'' is
@@ -84,7 +84,7 @@ Pros: Shared nothing,forced synchrony
 
 Cons: Forced syncrhony 
 
-\subsection{``Worker quwue'' model}
+\subsection{``Worker queue'' model}
 This approach is similar to a classic producer-consumer model where we
 have a number of workers which takes tasks off a circular queue and
 executes the processes. The main advantage of this model is that it
@@ -95,20 +95,24 @@ mechanism needed to do this isn't free, and could therefore come at a
 significant cost when we're executing a network consisting of small
 processes.
 
+When shortness is needed, we will refer to this model as Model 1 or M1.
+
 \subsection{Static orchestration model}
 In this model, we assign separate queues to each thread of execution
-and distribute the processes amongst them. Due to the properties of
-SME, this distribution of processes only needs to happen once, before
-we start network execution. The main advantage of this model is that
-eliminates any shared state in our network, and therefore we don't
-need to consider the thread-safety of our queues. This reduces the
-fixed cost of executing a process significantly. This model, however,
-is more sensitive to uneven distributions in process workloads. For
-instance, if we end up assigning predominantly small processes to one
-core and large processes to another, the core executing the small
-processes would be left idle until the other core has finished
-executing it's part of the cycle.
+and distribute (``orchestrate'') the processes amongst them. Due to
+the properties of SME, this distribution of processes only needs to
+happen once, before we start network execution. The main advantage of
+this model is that eliminates any shared state in our network, and
+therefore we don't need to consider the thread-safety of our
+queues. This reduces the fixed cost of executing a process
+significantly. This model, however, is more sensitive to uneven
+distributions in process workloads. For instance, if we end up
+assigning predominantly small processes to one core and large
+processes to another, the core executing the small processes would be
+left idle until the other core has finished executing it's part of the
+cycle.
 
+When shortness is needed, we will refer to this model as Motel 2 or M2.
 
 Overall, we expect the latter model to have a significant advantage in
 executing networks with small processes while the queue-locking cost
@@ -190,10 +194,11 @@ approach is that it adds a fixed computational cost to each process
 execution. This would become especially pronounced in model 1
 which would require 
 
-Furthermore, we would need to keep the state of the network
-as a global shared state which would need to be protected by locks
-when accessed by a thread. Both of these factors would significantly
-limit the concurrent scalability of the parallel execution. 
+Furthermore, we would need to keep the progression of the network
+execution as a globally shared state which would need to be protected
+by locks when accessed by a thread. Both of these factors would
+significantly limit the concurrent scalability of the parallel
+execution.
 
 One of the central parts of managing an execution cycle is how we
 synchronize our threads before leaving each cycle phase
@@ -222,9 +227,11 @@ A straight-forward array is much better suited for the task z7
 Classic locking mechanisms such as semaphores and mutexes needs no
 introduction. We will, however, spend a little bit of time on
 explaining the new kid on the block -- atomic operations.  Atomic
-operations 
+operations....
 
 \subsection{Process orchestration}
+\fxnote{This section doesn't really belong anywhere, remove or insert
+  into other sections}
 As we discussed in the previous section, the primary limiting factor
 for our multi-threaded network is an uneven and suboptimal
 distribution of processes across CPU-cores. If no attempt is made to
