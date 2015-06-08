@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage[danish,english]{babel}
 \usepackage[urw-garamond]{mathdesign}
 \usepackage{minted}
 \usepackage{graphicx}
@@ -9,11 +10,15 @@
 \usepackage{amsthm}
 \usepackage{xcolor}
 \usepackage{amsmath}
+\usepackage{wallpaper}
+%\usepackage{changepage}
+\usepackage[margin=10pt,font=small,labelfont=bf,labelsep=endash]{caption}
 
 \usepackage[
   backend=biber,
   backref=true,
   style=numeric,
+  sorting=none,
   citestyle=numeric]{biblatex}
 \addbibresource{citations.bib}
 
@@ -32,9 +37,9 @@
 \immediate\write18{make svgfigures}
 
 % Set up captions
-\captionnamefont{\small\bfseries}
-\captiontitlefont{\small}
-\captionwidth{0.8\linewidth}
+%\captionnamefont{\small\bfseries}
+%\captiontitlefont{\small}
+%\captionwidth{0.8\linewidth}
 
 % enumerate subsections
 \setsecnumdepth{subsection}
@@ -44,32 +49,60 @@
 \theoremstyle{definition}
 \newtheorem{property}{Property}
 
-\title{Implementing high performance Synchronous Message Exchange\\
-       University of Copenhagen}
-\author{Truls Asheim \texttt{<truls@asheim.dk>}}
-\date{}
+%\title{Implementing high performance Synchronous Message Exchange\\
+%       University of Copenhagen}
+%\author{Truls Asheim \texttt{<truls@asheim.dk>}}
+%\date{}
 
 \begin{document}
-
 \begin{titlingpage}
-\maketitle
+\thispagestyle{empty}
+\ULCornerWallPaper{1}{img/nat-farve.pdf}
+\ULCornerWallPaper{1}{img/diku-en.pdf}
+\begin{adjustwidth}{-1.75cm}{-1.5cm}
+\vspace*{-1cm}
+\textbf{\huge Bachelor's Thesis} \\
+\vspace*{2.5cm} \\
+\textbf{\Huge Implementing High Performance Synchronous Message Exchange} \\
+%\vspace*{.1cm} \\
+%{\huge An Eventual Consistent Parallel Block Device} \\
+\begin{tabbing}
+  Truls Asheim ~~ \= \texttt{<truls@asheim.dk>} \\[14.3cm]
+  \textbf{\Large Supervisor} \\
+  Brian Vinter \> \texttt{<vinter@nbi.dk>}
+\end{tabbing}
+\end{adjustwidth}
+    %\newpage
+    \ClearWallPaper
+
 \end{titlingpage}
+%\begin{titlingpage}
+%\maketitle
+%\end{titlingpage}
 
 
 \begin{abstract}
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-  laoreet lobortis erat, ac fringilla quam accumsan ut. Nam eget
-  tortor neque. Nulla dictum dapibus venenatis. Vestibulum interdum
-  sem vestibulum enim vulputate ullamcorper nec ut velit. Suspendisse
-  rhoncus a nisi eget viverra. Curabitur porttitor hendrerit elit vel
-  porta. Phasellus elementum nulla aliquet, rhoncus sapien sit amet,
-  maximus libero. Morbi ipsum sapien, faucibus et tempor sed, commodo
-  at enim. Curabitur maximus pretium felis, ac elementum nisi
-  tincidunt et. Sed facilisis lacus purus, sit amet blandit elit
-  ultricies sit amet. Maecenas et cursus libero, ac tincidunt arcu. In
-  at tincidunt ante. Pellentesque lacinia dui nec nulla accumsan
-  auctor faucibus elit suscipit. Pellentesque quis justo turpiso.
+  Synchronous Message Exchange (SME) is a CSP-like messaging framework
+  aimed at modeling synchronous systems(/systems) such as
+  hardware. With the goal of faster execution of SME networks, various
+  models for parallelized execution has been design, implemented and
+  benchmarked
+
+  We give an overview of the properties of SME and how they act in a
+  parallelized envirnonment. Then we explain the details of our
+  implementation and finally we measure our implementation through
+  various benchmarks. We have found that the achievable speedups are
+  highly dependent on the kind of work performed by a network, but in
+  optimal cases, we were able to achieve near linear speedups.
 \end{abstract}
+
+\begin{otherlanguage}{danish}
+\begin{abstract}
+Synchronous Message Exchange (SME) er et CSP-lignende messaging
+framework som er rettet imod modellering af synkrone systemer så som
+hardware. Vi har i dette projekt forsøgt at ..
+\end{abstract}
+\end{otherlanguage}
 
 \clearpage
 \tableofcontents\clearpage
@@ -86,6 +119,7 @@
 
 \appendix
 \include{appendix}
+
 
 \end{document}
 

@@ -3,19 +3,19 @@
 We have chosen to implement the SME library in the C++ language. C++
 combines the availability of high-level structures, such as classes,
 with the ability to, when needed, assert low-level control over the
-code generated. Furthermore, the C++11 revision of the language allows
-for easy access to features that were previously hard to use. as the
-functions provided by the \texttt{<atomics>} header which enables the
-use of atomic instructions and enforced memory ordering without the
-need for inline assembly and similar. Having access to atomics is a
-highly desire able feature for us since they can be used as
-high-performance synchronization primitives. Furthermore, classes in
-C++ are well suited for representing SME constructs and specifically,
-they provide a natural enclosure of the state maintained by a SME
-process.
+code generated. Furthermore, the C++11 \cite{cc11std} revision of the
+language allows for easy access to features that were previously hard
+to use. as the functions provided by the \texttt{<atomics>} header
+which enables the use of atomic instructions and enforced memory
+ordering without the need for inline assembly and similar. Having
+access to atomics is a highly desire able feature for us since they
+can be used as high-performance synchronization
+primitives. Furthermore, classes in C++ are well suited for
+representing SME constructs and specifically, they provide a natural
+enclosure of the state maintained by a SME process.
 
-The library is meant to be imported by applications wishing to take
-advantage of the SME-model.
+The library is meant to be imported by applications implementing
+systems using the SME model.
 
 The implementation was performed in several phases. The initial
 version of the C++SME code was purely single-threaded and was
@@ -23,21 +23,31 @@ implemented to play around with the C++ API's and for defining the
 API used to define SME networks.
 
 Adding support for multi-threading required a lot of the code from the
-initial single-threaded implementation to be refactored and rewritten.
+initial single-threaded implementation to be refactored and
+rewritten. The main reason for this, is that the single threaded
+version was done using high level C++ containers such as maps and
+vectors which are.... FIXME. Furhtermore, we wanted to be able to
+switch between the sequential and parallel versions of the execution
+framework, which meant that they had to be split into two separate
+classes which inherited common code.
+
+It's also worth noting that these C++
+features proved to be significantly slower than using a
+straight-forward array.
 
 Since the networks that we benchmark are large enough that it would be
 tedious to write them by hand, features were also added mainly for the
-purpose of supporting benchmarking.  ur initial approach to
-benchmarking used python script for generating the benchmark networks,
-however, this method quickly proved to be in infeasible since GCC's
-compilation time increases, seamingly, exponentially with the amount
-of objects defined in the code being compiled. We therefore had to
-enable the SME-library to support runtime definition of networks. Mind
-you, that networks are still statically defined in the sense that the
-orchestration of processes must be performed before the start of
-network execution. Networks that change at runtime is beyond the scope
-of SME since it simply isn't possible in hardware, which SME is
-intended to map \fxnote{rewrite}
+purpose of supporting benchmarking. Initially, we attempted to
+generate our benchmark networks by generating their code using python
+scripts.  this method, however, quickly proved to be in infeasible
+since GCC's compilation time increases, seemingly exponentially with
+the amount of objects defined in the code being compiled. We therefore
+had to add support for runtime definition of networks in the C++SME
+library. Mind you, that networks are still statically defined in the
+sense that the orchestration of processes must be performed before the
+start of network execution. Networks that change at runtime is beyond
+the scope of SME since it simply isn't possible in hardware, which SME
+is intended to map \fxnote{rewrite}
 
 We want the API to be as seamless as possible, that is, it should get
 int he way of the programmer as little as possible. Several phases of
@@ -51,24 +61,65 @@ proof of concept and to experiment with different API's for defining
 SME networks.
 
 \section{Queue implementation}
+We implemented the processes 
+
+
 How we performed process orchestration and, in particular, the
 workqueue mechanism got a lot of attention in the previous chapter. In
 this section, we will how we made the actual implementations of the
 work queues
 
-The locking mechanisms used in sought 
+The locking mechanisms used in the special processes are Condition
+Variables \cite{Hoare:1974:MOS:355620.361161}
 
 \subsection{Locking mechanisms and atomics}
+
+
 Atomics, and particularlily lockless algorithms have recently been
 made availible for ``casual'' use by programmer following their
 inclusion in recent language revisions.
 
 https://www.arangodb.com/2015/02/comparing-atomic-mutex-rwlocks/
 
+\subsection{Distributing processes across threads}
+In the static orchestration model, we need to distribute the processes
+in the network across the threads. While this, in isolation, isn't a
+very interesting design detail, the specific way that the algorithm
+that we use works will help to explain some anomalies seen in our
+benchmarks.
+
+Let $p$ be the number of processes in our network and $t$ be the
+number of threads. The algorithm then works by distributing
+$\lfloor p/t\rfloor$ processes across the first $t-1$ threads and then
+the remaining $p-(t-1)\cdot\lfloor p/t\rfloor$ will end up on the final
+process. The example in \cref{tab:procdist} shows what this unequal
+distribution looks like in practice.
+
+%\fxnote{In benchmark section: We did consider this potential
+%problem when implementing the distribution code, but we didn't expect
+%it to be as clearly visible in the benchmarks as it turned out to be.}
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Thread} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} \\\hline
+\textbf{Optimal distribution} & 2 & 2 & 2 & 1 \\\hline
+\textbf{Actual distribution} & 1 & 1 & 1 & 4 \\\hline
+\end{tabular}
+\caption{Actual and optimal distributions of 7
+  processes across 4 threads (in terms of evenness)}
+\label{tab:procdist}
+\end{table}
+
+The same algorithm is used for distributing bus propagation across
+threads, however, since bus propagation doesn't require any particular
+work, the created imbalance has less impact.
+
 \section{Design goals}
 The library takes advantage of the fact that the initial process
 orchestration is only executed once and thus can be implemented with
-focus on code clarity rather than performance. This 
+focus on code clarity rather than performance. This
 
 \section{Public API}
 TODO: How the SME constructs are exposed by the framework and which
