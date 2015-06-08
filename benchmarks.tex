@@ -112,16 +112,16 @@ void step() {
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{graphs/graphone}
+\includegraphics[width=\textwidth]{graphs/intel-sync}
 \caption[Benchmark graph]{Graph showing the speedup of a SME network
   consisting of 20000 and 50000 processes respectively when executed
-  for 50000 cycles on an Intel Xeon CPU}
+  for 100000 cycles on an Intel Xeon CPU}
 \label{fig:intel-sync}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=\textwidth]{graphs/amd-sync-20000}
+\includegraphics[width=\textwidth]{graphs/amd-sync}
 \caption[Synchronization-dominated benchmark on AMD cluster]{Benchmark results for a network of 20000 processes running
 for 100000 iterations on the AMD cluster}
 \label{fig:amd-sync}
@@ -222,7 +222,7 @@ The size of the workload and the number of nodes were chosen such that
 the running times of the benchmarks would be reasonable \fxnote{elaborate}
 
 We use floating point numbers as values as opposed to integer values
-simply because they are more demanding of the CPU.
+simply because floating point operations are more expensive.
 %\fxnote{Yes... good question, Why exactly do we do that?}
 
 The following code is used as workload in our processes
@@ -251,7 +251,7 @@ void step() {
 \subsection{Discussion}
 The overall conclusion that we can draw from this benchmark it that,
 for workloads that are sufficiently large, the static orchestration
-model exhibits significantly better speedups than then the work list
+model exhibits significantly better speedups than the work list
 model.
 
 The work list model, however, appears to be less sensitive to
@@ -259,9 +259,9 @@ variations in problem sizes since it performs produces similar
 speedups in the two benchmarks that we have performed. It is
 interesting that the overhead related to incriminating the atomic
 pointer still has a noticeable negative impact on its performance. The
-increased stability of the results can probably be attributed to the
+relative invariance of the results can probably be attributed to the
 continuous synchronization required by the work list which causes
-neither of the threads falls behind or speeds ahead of the other
+neither of the threads to fall behind or speed ahead of the other
 threads. Therefore, the combined time that the threads spends in the
 synchronization barrier is smaller compared to the statically
 orchestrated model.
@@ -273,7 +273,7 @@ pattern that that the statically orchestrated model in the benchmark
 with the least amount of work forms when running across more than 10
 threads. We assume this to be caused by the uneven distribution of
 processes performed by the method described in the implementation
-chapter, in the case of 200 processes distributed across 12 threads,
+chapter which, in the case of 200 processes distributed across 12 threads,
 would assign 8 additional processes to one thread compared to the
 others.
 
@@ -304,69 +304,74 @@ however, still an open question how
 
 \section{Weak scaling}
 In the previous benchmarks, we have investigated the strong scaling
-properties of our implementation, that is that we have kept the
-workload constant and varied the number of execution threads. In the
-weak scaling benchmark, we will keep the workload per thread constant
+properties of our implementation, i.e., we have kept the
+amount of work constant and varied the number of execution threads. In the
+weak scaling benchmark, we will keep the workload \textit{per thread} constant
 by performing an amount of work defined to be a fixed multiple of the
-number of threads that we use. The purpose of this, is to show if
-there is a limitation on the scalability or whether we can scale to an
-"`infinite"' amount of cores simply by adding more work. This is what
-is referred to as the \textit{weak scaling}
-properties\cite{weakscaling} of our implementation.
+number of threads that we use. The purpose of this benchmark, is to
+determine if there is a hard limit on our achievable scalability or
+whether we can scale to an "`infinite"' amount of threads simply by
+adding more work. This is what is referred to as the \textit{weak
+  scaling} properties\cite{weakscaling} of our implementation.
 
 Since the previous benchmarks has shown that the achievable speedup
 depends on ratio between cycles (synchronizations) and work, we have
 performed our weak scaling benchmarks using the following
-cycles:processes ratios, 2:1, 1:1 and 1:2.
+cycles-to-processes ratios, 2:1, 1:1 and 1:2.
 
-Ideally, we want this benchmark to show that our ability to scale is
-only limited by how many CPUs that we can add to our system.
+Ideally, we want this benchmark to have a speedup of 1 for any network
+with a constant work-per-thread ratio. This would mean that our ability
+to scale is only limited by how many CPUs that we can add to our
+system.
 
-The results of this benchmark can be seen in \cref{fig:uneven}
+The results of this benchmark can be seen in \cref{fig:weak}
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{graphs/weak}
-\caption[Weak scaling benchmark]{Weak scaling}
+\caption[Weak scaling benchmark]{The performance of the two
+  parallelization models when performing a constant amount of work per
+thread.}
 \label{fig:weak}
 \end{figure}
 
 \subsection{Discussion}
-We can see that the continuous overhead of the atomic variable used in
-the worker queue model is still clearly visible and appears to
+We can see that the continuous overhead associated with the atomic variable used in
+the worker list model is still clearly visible and appears to
 increase with the level of parallelization. The statically
 orchestrated model, on the other hand, produces much better results
 and appear to show weak scaling properties with speedups within +/-
 0.05. The performance of this model, however appears to drop when
 going from 16 to 32 cores. This could be explained by the fact that we
-performed the benchmarks on a on a 2x16 core machine This means, that
-we cross CPU boundaries when going from 16 to 32 cores.
+performed the benchmarks on a on a 2x16 core machine. This means, that
+CPU boundaries are crossed when we go from 16 to 32 cores.
 
 Contrary to our expectations, the work-per-cycle ratio is not clearly
 visible in the results. The explanation for this may simply be that
 the work-per-cycle ratios that we used in the benchmark weren't
 sufficiently large. In the cycle dominated benchmark we used ratios of
-10:1 and 1:10 respectively while in this benchmark we used ratios of
+10:1 and 1:10 respectively while in this benchmark we used, much
+smaller, ratios of
 2:1, 1:1 and 1:2.
 
 
 \section{Uneven workloads}
 This benchmark, we attempt to confirm our conjecture that the work
 list model will perform better than the statically orchestrated model
-for networks coosisting of uneven workloads. This benchmark
-essentially repeats the cycle dominated benchmark except that we
-divide the processes on the ring evenly into two groups where one
-group performs exactly one fourth as much work as the other. This
-means, that we use the same process code as \cref{lst:cyclecode}
+when executing networks consisting of processes with uneven
+workloads. This benchmark essentially repeats the cycle dominated
+benchmark except that we divide the processes on the ring evenly into
+two groups where one group performs exactly one fourth as much work as
+the other. So, we use the same process code as \cref{lst:cyclecode}
 except that half of the processes will only run for 2500 iterations
-instead of 10000 It's important to note that the processes in each of
-these groups are laid out sequentially on the ring. since this will force the
-statically orchestrated model into its worsts-case distribution of
-workload.
+instead of 10000. It's important to note that the processes in each of
+these groups are laid out sequentially on the ring, one after the
+other. The purpose of this orchestration, is to force the statically
+orchestrated model into its worst-case workload distribution.
 
 The statically orchestrated model will thus spend a lot of time in the
 synchronization barrier while the work list model will be able to
-distribute load of the network much more evenly across the
+distribute load of the network much more evenly across its
 threads. This benchmark is indeed very artificial, but it serves the
 purpose of showing the strengths of the work list model
 
@@ -380,7 +385,7 @@ purpose of showing the strengths of the work list model
 \end{figure}
 
 \subsection{Discussion}
-This is the first benchmark where the work list model performed better
+This is the first benchmark where the work list model performs better
 than the statically orchestrated model so the fundamental conclusion
 is that our conjecture was confirmed. However, the difference between
 the two models aren't as significant as we expected. It remains to be
@@ -388,6 +393,15 @@ seen whether the work list model would increase its advantage over the
 statically orchestrated model if we increased the workload imbalances
 between the processes even more but presumably, this would be the
 case.
+
+This benchmark allows us to propose the interesting conjecture that if
+the light and heavy processes where placed on the ring (the benchmarked
+network) in a way that would be more optimal for the statically
+orchestrated model, then it would perform better that the
+work list model. The optimal organization would, in this case,
+probably be alternating order of light ant heavy processes but even
+randomizing the process ordering would presumably be an improvement
+over status quo.
 
 So, once again, the continuous synchronization of the work list model
 proves disproportionately expensive.
