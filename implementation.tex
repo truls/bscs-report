@@ -2,102 +2,118 @@
 
 We have chosen to implement the SME library in the C++ language. C++
 combines the availability of high-level structures, such as classes,
-with the ability to, when needed, assert low-level control over the
+with the ability to (when needed) assert low-level control over the
 code generated. Furthermore, the C++11 \cite{cc11std} revision of the
 language allows for easy access to features that were previously hard
-to use. as the functions provided by the \texttt{<atomics>} header
-which enables the use of atomic instructions and enforced memory
-ordering without the need for inline assembly and similar. Having
-access to atomics is a highly desire able feature for us since they
-can be used as high-performance synchronization
+to use. Examples of such, are the functions provided by the
+\texttt{<atomics>} header which enables the use of atomic instructions
+and enforced memory ordering without the need for inlining assembly instructions. Having access to atomics is a highly desire able feature for
+us since they can be used as high-performance synchronization
 primitives. Furthermore, classes in C++ are well suited for
-representing SME constructs and specifically, they provide a natural
-enclosure of the state maintained by a SME process.
+representing SME constructs and they provide a natural enclosure of
+the state maintained by a SME process.
 
-The library is meant to be imported by applications implementing
-systems using the SME model.
+We have implemented a library that is meant to be imported by
+applications implementing systems using the SME model.
 
-The implementation was performed in several phases. The initial
-version of the C++SME code was purely single-threaded and was
-implemented to play around with the C++ API's and for defining the
-API used to define SME networks.
+%The implementation was performed in several phases. 
 
-Adding support for multi-threading required a lot of the code from the
-initial single-threaded implementation to be refactored and
-rewritten. The main reason for this, is that the single threaded
-version was done using high level C++ containers such as maps and
-vectors which are.... FIXME. Furhtermore, we wanted to be able to
-switch between the sequential and parallel versions of the execution
-framework, which meant that they had to be split into two separate
-classes which inherited common code.
 
-It's also worth noting that these C++
-features proved to be significantly slower than using a
-straight-forward array.
+%It's also worth noting that these C++ features proved to be
+%significantly slower than using a straight-forward array.
 
-Since the networks that we benchmark are large enough that it would be
-tedious to write them by hand, features were also added mainly for the
-purpose of supporting benchmarking. Initially, we attempted to
-generate our benchmark networks by generating their code using python
-scripts.  this method, however, quickly proved to be in infeasible
-since GCC's compilation time increases, seemingly exponentially with
-the amount of objects defined in the code being compiled. We therefore
-had to add support for runtime definition of networks in the C++SME
-library. Mind you, that networks are still statically defined in the
-sense that the orchestration of processes must be performed before the
-start of network execution. Networks that change at runtime is beyond
-the scope of SME since it simply isn't possible in hardware, which SME
-is intended to map \fxnote{rewrite}
 
-We want the API to be as seamless as possible, that is, it should get
-int he way of the programmer as little as possible. Several phases of
-refinement led to the current API which reduces the amount of
-boilerplate code required  significantly compared to the original version
+%We want the API to be as seamless as possible, that is, it should get
+%int he way of the programmer as little as possible. Several phases of
+%refinement led to the current API which reduces the amount of
+%boilerplate code required  significantly compared to the original version
 
 \section{Initial implementation}
-Our initial implementation was a sequential implementation of the
-SME execution environment. This implementation was done simply, as a
-proof of concept and to experiment with different API's for defining
-SME networks.
+The initial version of the C++SME code was purely single-threaded and
+was implemented to play around with the C++ APIs and defining the user
+visible APIs for defining SME networks. This implementation served as
+a proof-of-concept which allowed us to gain experience and familiarity
+with the SME model. We therefore used as many high-level containers as
+possible such as \texttt{vector} and \texttt{map}
+
+\section{Multithreaded implementation}
+Adding support for multi-threading required a lot of the code from the
+initial single-threaded implementation to be refactored and
+rewritten. The main reason for this was that we wanted to move away
+from using high level containers and represent our queues using
+arrays. Since one of the goals of our design is to minimize the
+overhead related to executing processes, we want to use the list data
+structure which allow elements to be accessed in sequential order as
+fast as possible. In our case, this is an array. More advanced
+data structures such as linked lists exhibits poor cache locality
+which slows element accesses.
+
+\subsection{Benchmarking support}
+Since the networks that we benchmark are large enough that it would be
+tedious to write them by hand, features were also added mainly for the
+purpose of supporting benchmarking. We hadn't initially foreseen the
+need for these features since we wanted to statically generate the
+code for benchmark networks by using code generation scripts. This
+method, however, proved to be infeasible due to compilation
+times. Even relatively small networks consisting of 5000 processes,
+took in excess of one hour to compile. This problem persisted after disabling
+optimization features in GCC known for increasing compilation time.
+
+We therefore had to add support for runtime definition of networks in
+the C++SME library. Mind you, that networks are still statically
+defined in the sense that the orchestration of processes must be
+performed before the start of network execution. Networks that change
+at runtime is beyond the scope of SME since it simply isn't possible
+in hardware, which SME is intended to map.
 
 \section{Queue implementation}
-We implemented the processes 
-
-
 How we performed process orchestration and, in particular, the
 workqueue mechanism got a lot of attention in the previous chapter. In
-this section, we will how we made the actual implementations of the
-work queues
+this section, we will describe some aspects of the actual
+implementation of the queues
 
-The locking mechanisms used in the special processes are Condition
-Variables \cite{Hoare:1974:MOS:355620.361161}
+\subsection{Locking mechanisms}
+As specified by our design, we need locking in two areas of our
+implementation. The first, is to enforce the barriers in the
+cycle. The second, which is specific to the work list model, is to
+support concurrent accesses to the process queues.
 
-\subsection{Locking mechanisms and atomics}
+We initially attempted to create all locks entirely by using atomic
+variables. After this effort turned out to be (partially)
+unsuccessful, we switched to using more traditional synchronization
+primitives.
+
+Referring to our description of the special purpose processes in
+\cref{sec:sync}, we ended up implementing the Locker, Syncer and Reset
+processes using Condition Variables
+\cite{Hoare:1974:MOS:355620.361161}. This choice was made since
+Condition Variables are readily available in C++11 and performs the
+task that we require. Whenever a Locker process is executed by a
+thread it will block, waiting for the mutex associated with the
+condition variable to be released. The
+Syncer and Reset processes will release the waiting threads on the
+condition that $n-1$ threads has entered the barrier. 
+
+In the work list model we use an atomic integer as a pointer to the
+current process in the execution queue. The atomic integer allows safe
+concurrent access to the process execution queue.
 
 
-Atomics, and particularlily lockless algorithms have recently been
-made availible for ``casual'' use by programmer following their
-inclusion in recent language revisions.
-
-https://www.arangodb.com/2015/02/comparing-atomic-mutex-rwlocks/
+%https://www.arangodb.com/2015/02/comparing-atomic-mutex-rwlocks/
 
 \subsection{Distributing processes across threads}
 In the static orchestration model, we need to distribute the processes
-in the network across the threads. While this, in isolation, isn't a
-very interesting design detail, the specific way that the algorithm
-that we use works will help to explain some anomalies seen in our
+in the network across threads. While this, in isolation, isn't a very
+interesting implementation detail, the specific of the algorithm that
+we use will help to explain some anomalies seen in our upcoming
 benchmarks.
 
 Let $p$ be the number of processes in our network and $t$ be the
 number of threads. The algorithm then works by distributing
 $\lfloor p/t\rfloor$ processes across the first $t-1$ threads and then
 the remaining $p-(t-1)\cdot\lfloor p/t\rfloor$ will end up on the final
-process. The example in \cref{tab:procdist} shows what this unequal
+thread. The example in \cref{tab:procdist} shows what this unequal
 distribution looks like in practice.
-
-%\fxnote{In benchmark section: We did consider this potential
-%problem when implementing the distribution code, but we didn't expect
-%it to be as clearly visible in the benchmarks as it turned out to be.}
 
 \begin{table}
 \centering
@@ -112,18 +128,18 @@ distribution looks like in practice.
 \label{tab:procdist}
 \end{table}
 
-The same algorithm is used for distributing bus propagation across
-threads, however, since bus propagation doesn't require any particular
-work, the created imbalance has less impact.
+The same algorithm is used for distributing bus-propagation processes across
+threads. However, since bus propagation doesn't require any particular
+work, the created imbalance has less of an impact.
 
-\section{Design goals}
-The library takes advantage of the fact that the initial process
-orchestration is only executed once and thus can be implemented with
-focus on code clarity rather than performance. This
+%\section{Design goals}
+%The library takes advantage of the fact that the initial process
+%orchestration is only executed once and thus can be implemented with
+%focus on code clarity rather than performance. This
 
-\section{Public API}
-TODO: How the SME constructs are exposed by the framework and which
-operations that can be performed on them.
+%\section{Public API}
+%TODO: How the SME constructs are exposed by the framework and which
+%operations that can be performed on them.
 
 %\section{Testing}
 %In order to check that our network works as intended and is able to

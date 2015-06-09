@@ -1,17 +1,17 @@
 \chapter{Introduction}
 
-In this report, we describe the design and implementation of a highly
+In this report, we describe a design and implementation of a highly
 efficient library for parallel execution of new, globally synchronous,
 message passing framework called Synchronous Message Exchange
 (SME). We will present a parallel, compiled framework, named
 C++SME, which can be used to implement and execute applications
 using the SME model.
 
-The remainder of this chapter, will describe and define the SME
+The remainder of this chapter will describe and define the SME
 model. The second chapter will describe the process behind designing
-C++SME. In the third chapter we will describe the implementation
-process and finally, we will show the benchmarks performed of our
-implementation.
+C++SME. In the third chapter we will explain the implementation
+process. Finally, we will show the benchmarks performed of our
+implementation before presenting our conclusions.
 
 
 \section{Background and Motivation}
@@ -22,35 +22,34 @@ massive parallelism supported by GPUs in general purpose
 computing. Another technology which can be used to achieve this goal
 is Field-programmable Gate Arrays (FPGA). As their name suggests,
 FPGAs are integrated circuits whose function can be altered after
-manufacturing
+manufacturing.
 
-While FPGAs provides several advantages over using for processing work
+While FPGAs provide several advantages over using for processing work
 including a significantly improved performance-per-watt ratio, their
-widespread adoptation\fxnote{find right word} are limited by the lack
-of tools which allows ordinary programmers to adapt their applications
-to run a FPGA. Currently, Today, FPGAs are programmed using Hardware
-Description Languages which enable programmers to specify the design
-of the FPGA in a low-level manner. Due to this, their use are largely
-restricted to engineers with working knowledge in the field of
-hardware design. In order for software developers to take advantage of
-FPGAs, improved high-level hardware design utilities are required
-\cite{bacon2013fpga}.
+prevalence are limited by the lack of tools which allows ordinary
+programmers to adapt their applications for FPGAs. Currently,
+FPGAs are programmed using Hardware Description Languages which enable
+programmers to specify the design of the FPGA in a low-level
+manner. Due to this, their use are largely restricted to engineers
+with working knowledge in the field of hardware design. In order for
+software developers to take advantage of FPGAs, improved high-level
+hardware design utilities are required \cite{bacon2013fpga}.
 
-In an attempt to improve this situation, a master thesis explored
-using PyCSP to define hardware designs and synthesize them into
-Hardware Description Languages. Since CSP is based on the idea that
-any process can communicate at any time, the primary challenge that
-arose was how to model the clock-driven global synchrony that exists
-in hardware using CSP. Their solution was to add a central
-clock process which all processes in the network had to read from in
-order to know when communication was allowed. Furthermore,
-latch-processes had to be inserted between processes in order to
-control value propagation. This required the addition of channels from
-the clock process to every process in the network. This explosion of
-the number of channels proved difficult to manage and even though they
-successfully managed to synthesize simple CSP networks into HDL's, the
-feasibility of taking a pure CSP approach to hardware design was
-discredited.
+In an attempt to improve this situation, a master's
+thesis\cite{thesis} explored using PyCSP to define hardware designs
+and synthesize them into Hardware Description Languages. Since
+Concurrent Sequential Processes (CSP) is based on the idea that any
+process can communicate at any time, the primary challenge that arose
+was how to model the clock-driven global synchrony that exists in
+hardware using CSP. Their solution was to add a central clock process
+which all processes in the network had to read from in order to know
+when communication was allowed. Furthermore, latch-processes had to be
+inserted between processes in order to control value propagation. This
+required the addition of channels from the clock process to every
+process in the network. This explosion of the number of channels
+proved difficult to manage and, even though they successfully managed
+to synthesize simple CSP networks into HDL's, the feasibility of
+taking a pure CSP approach to hardware design was discredited.
 
 Some properties of CSP, however, proved to be useful in relation to
 hardware design. Particularly the shared-nothing property of CSP
@@ -63,9 +62,9 @@ designs (such as shared-nothing) and combining them with properties that
 enforces a hardware-like paradigm such as global synchrony and an
 implicit clock \cite{vinter2014synchronous}.
 
-The aim of this project is to attempt to implement a parallelized
-execution environment for SME in order to improve the speed of which
-the systems that is modeled can be simulated.
+The aim of this project is to implement a parallelized execution
+environment for SME in order to improve the speed of which the systems
+that is modeled can be simulated.
 
 
 %SME is an attempt to provide a programming framework that, while
@@ -91,7 +90,7 @@ report to avoid any ambiguities.
 \begin{description}
   \item[Network] A network is the highest level structure in the
     SME-model. It is simply a network of processes connected by buses
-  \item[Cycle] During a cycle (\cref{fig:cycle}, all processes
+  \item[Cycle] During a cycle (\cref{fig:cycle}), all processes
     executes and all busses propagates their values. A cycle goes
     through two distinct phases which we will refer to as the process
     execution phase and the value propagation phase. The process
@@ -115,21 +114,25 @@ report to avoid any ambiguities.
 \subsection{Components}
 Compared to CSP, a much smaller and simpler set of components are used
 to model the process network. In this section, we describe those
-components
+components.
 
 \begin{description}
 \item[Process] A process is an execution unit performing a unit of
   work. A process is defined by input and output busses used for
   communicating with other processes in the network and function which
-  is called when the process is executed. The internal state of a
-  process persistent between executions, but it's execution cannot
-  have any side-effects. Thus, the only way the execution of a process
-  can alter the state of other processes is by bus
-  communication. \fxnote{Isn't it really the other way around?}
+  is called when the process is executed. A process execution cannot
+  have any side effects, however, The internal state of a process is
+  persistent between executions.  Thus, the only way the execution of
+  a process can alter the state of other processes is by bus
+  communication. When we use the word "`process"' in the remainder of
+  this report, this is what we refer to.
+
+%\fxnote{Isn't it really the
+%    other way around?}
 \item[Bus] A bus enables communication between processes and should be
   considered analogous to buses found in actual hardware. A bus
   consists of a writing-slot and a reading-slot, both of which can
-  hold a (signed integer/single FIXME) value. A bus in SME implements the
+  hold a single value. A bus in SME implements the
   CSP-equivalent of a one-to-all channel with a one message
   overwrite-buffer which means that only the final value written to
   the writing-slot will persist in the next cycle. The value of the
@@ -140,7 +143,7 @@ components
   cycle the value of the writing-slot is copied to the
   reading-slot. From the point of view of the processes, the
   value-propagation phase is atomic, meaning that the values of all
-  buses can be observed changing ``at conce''. If no value is written
+  buses can be observed changing ``at once''. If no value is written
   the writing-slot of a bus during a cycle, the value of its
   writing-slot will be 0 in the subsequent cycle.
 
@@ -163,7 +166,7 @@ properties also influences the design of our execution model.
   \label{synchro}
   As a consequence of implementing the simulated clock best, all
   events and communications of the network occurs completely
-  synchronous from the point of view of a process. FIXME
+  synchronous from the point of view of a process.
 \end{property}
 
 \begin{property}[Shared Nothing]
@@ -179,6 +182,13 @@ properties also influences the design of our execution model.
 This report will not discuss details related to design of hardware
 
 \section{Related work}
+
+High level approaches to programming FPGAs are offered from at least
+two major FPGA manufacturers. Xilinx offers a language called Vivado-C
+as a part of their Vivado high Level Synthesis package which allows
+programs written in a C-like language to be synthesized into
+FPGAs. Another FPGA manufacturer, Altera, offers an OpenCL interface
+to their FPGAs
 
 
 

@@ -1,5 +1,38 @@
 \chapter{Conculsions}
-% We have revealed some of the properties of SME. More real-world usage is still needed in order to decide on the optimal way to implement the network. We have given some options and shown that it is possible to support multiple execution models in the same framework. 
+% We have revealed some of the properties of SME. More real-world usage is still needed in order to decide on the optimal way to implement the network. We have given some options and shown that it is possible to support multiple execution models in the same framework.
+
+We have successfully showed that it is possible to introduce a
+parallelization model for SME which delivers significant speedups in
+environments where sufficient hardware parallelism is available.
+
+\noindent
+The statically orchestrated model, in particular, proved to be extremely
+successful and is capable of achieving near-linear speedups for certain
+workloads. These results were made possible through our concept of
+letting the execution flow "`self manage"' by using special processes.
+
+\noindent
+Our work list model, on the other hand, generally delivered a
+disappointing performance. We attribute this to the synchronization
+mechanism used which proved more expensive than anticipated.
+
+\noindent
+Based on the benchmarks that we have performed, we conclude that there
+is a large difference between the speedups achieved by different
+workloads. This raises the question of whether our results are
+representative for SME networks implementing real-world systems.
+
+\noindent
+Looking ahead, our results opens up increased use of the SME model for
+simulating hardware designs since we, through parallelization has been
+able to significantly decrease the time required to execute SME
+networks.
+
+\noindent
+Overall, our work has laid a foundation for additional exploration
+into making parallelized SME implementations. Our results and
+conclusions sets a clear direction for future work aiming to improve
+this implementation even more.
 
 %%% Local Variables:
 %%% mode: latex

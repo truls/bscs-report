@@ -12,7 +12,8 @@ performing varying amounts of work.
 
 We conjecture that the scalability of our implementation will depend
 strongly on the nature of the workload performed by the SME-networks
-benchmarked. We will therefore benchmark both light and heavy
+benchmarked. We will therefore benchmark both computationally light
+and heavy processes.
 
 As our previously presented hypotheses states, we expect our
 benchmarks to show that the effects of syncing becomes more pronounced
@@ -22,7 +23,7 @@ performed by each process increases.
 
 \begin{figure}
 \centering
-\includegraphics{figures/ring}
+\includegraphics[width=0.5\textwidth]{figures/ring}
 \caption[SME network used for benchmarking]{Illustration showing the
   layout of the network used for benchmarking. The blue circles
   represents processes and the arrows represents busses}
@@ -31,7 +32,7 @@ performed by each process increases.
 
 
 \section{Testing methodology}
-All of the time measurements shown were performed inside the SME
+Measurements shown were performed inside the SME
 framework itself using the C++11 \texttt{<chrono>} functions, and
 measures only the actual execution time of the network. It therefore
 does not include the constant time required to generate the
@@ -46,7 +47,7 @@ The Intel machine has the following specs
 \end{itemize}
 
 and the AMD machines used are part of the eScience cluster at NBI and
-boasts the following specs:
+have the following specs:
 \begin{itemize}
   \item CPU: 2x AMD Opteron 6272 @ 2.1GHz, 16 cores
   \item RAM: 128GB
@@ -64,12 +65,12 @@ performed using statically linked binaries.
 
 All of the benchmarks has been executed 5 times and the graphs are
 based on the averages of these. Error bars showing the minimum and
-maximum deviation from the average has been added to all graphs,
-however, in some cases the deviations between benchmark runs were too small
-for the error bars to be visible.
-We have tried to size the workloads such that the running times are
-kept within reasonable bounds \fxnote{elaborate}
-We calculate our speedup using the formula
+maximum deviation from the average has been added to all graphs.
+However, in some cases the deviations between benchmark runs were too
+small for the error bars to be visible.  We have tried to size the
+workloads such that the running times are kept within reasonable
+bounds We calculate our speedup using the formula
+%\fxnote{elaborate} 
 
 
 \begin{equation*}
@@ -81,7 +82,7 @@ where $S$ is the achieved speedup, $T_{\text{old}}$ is the original
 (post-improvement) speed \cite{hennessy2012computer}.
 
 As a final note, when we talk about the workload of a cycle we refer
-to the combined work of all processes in the network, not the work
+to the combined work of all processes in the network and not the work
 performed by an individual process. As such, we define the workload of
 the network as a function of both the work performed by the individual
 processes and the number of processes participating in the
@@ -92,7 +93,7 @@ In this section, we present a benchmark where the performance is
 predominantly determined by the efficiency of the synchronization
 mechanisms.
 
-We perform this benchmark by creating a ring which does nothing other
+We perform this benchmark by creating a ring which does nothing more
 than passing an integer value from process to process. Sine each
 process only takes a few clock cycles to execute, we expect that this
 benchmark will expose the overhead caused by synchronization.
@@ -107,7 +108,7 @@ void step() {
 \end{minted}
 
 \caption{Source code for the execution unit of the processes
-  participating in the network used for sync-dominated benchmarking}
+  participating in the network used for sync dominated benchmarking}
 \end{listing}
 
 \begin{figure}
@@ -136,27 +137,28 @@ processes. Both networks executed 100000 cycles.
 
 When looking at the benchmark of the worker list model, one thing that
 is clearly visible from this benchmark is the overhead produced by the
-atomic increment that is required.. This model is doubly penalized
-when running the benchmark since we, addition to then time required by
-the atomic increment, which is performed before every process
-execution, also need to wait for all of the threads to sync
-up at the end of a cycle. What is slightly surprising, however, is the
-actual performance that this method shows. It performs significantly
-worse when going from one to two threads. The most likely explanation
-for this result is CPU optimizations which make atomic updates of a
+atomic increment that is required. 
+
+In addition to the time required by the atomic increment, which is
+performed before every process execution, we also need to wait for the
+threads to sync up at the end of a cycle. This means that this model
+is doubly penalized. What is slightly surprising, is the actual
+performance that this method shows. It performs significantly worse
+when going from one to two threads. The most likely explanation for
+this result is CPU optimizations which make atomic updates of a
 variable less costly when these updates only occures from one thread.
 
 Our static orchestration model performs quite decently and produces
 almost 2x speedup when going from 1 to 2 threads. When adding
 additional threads, the speedup decreases, which is expected since the
-time spent synchronizing is increased,
+time spent synchronizing is increased.
 
 %\fxnote{which manifests as
 %  dropping CPU-utilization. When running 4 threads, the CPU
 %  utilization drops to 360\%, unfortunately, I probably wont have time
 %  to measure or show this}
 
-Common for both of the models, is that the size of the network
+Common for both of the models is that the size of the network
 executed seems to have no impact on the relative speedups achieved.
 
 Since the Xeon CPU that the benchmarks were performed on only have 4
@@ -166,38 +168,35 @@ hypothesis for explaining the cause of this is that branch-prediction
 isn't very effective at predicting which functions we're going to call
 in our SME network. A branch mis-prediction causes the CPU-pipeline to
 be cleared, creating an optimal condition for Hyper Threading to make
-use of the empty pipeline-stages\cite{fog2014microarchitecture} While
-branch-predictors This hypothesis could be tested by running the
-program through a profiler in order to measure the number of
-mis-predictions occurring. At this time, these results are not
-available.
+use of the empty pipeline-stages\cite{fog2014microarchitecture}. This
+hypothesis could be tested by running the program through a profiler
+in order to measure the number of mis-predictions occurring. At this
+time, these results are not available.
 
 \Cref{fig:amd-sync} show the results of the smallest version of the
 benchmark running on the AMD cluster. The results are significantly
 worse compared to the results of the Intel Xeon CPU, both in absolute
-running times \fxnote{Is it OK to show the numbers?} and
-speedup. Early possible explanations was that, due to the extremely
-long running time of the benchmark, we were seeing the effects of the
-process being moved between CPU-cores. However, the results remained
-unchanged after pinning the threads to CPU-cores placed on the same
-NUMA-unit. Thus, the only reasonable explanation explanation is that our
-syncronization mechanisms is significantly less optimized on the AMD
-CPU compared to the Intel CPU.
+running times and speedup. Early possible explanations was that, due
+to the extremely long running time of the benchmark, we were seeing
+the effects of the process being moved between CPU-cores. However, the
+results remained unchanged after pinning the threads to CPU-cores
+placed on the same NUMA-unit. Thus, the only reasonable explanation is
+that our syncronization mechanisms is significantly less optimized on
+the AMD CPU compared to the Intel CPU.
 
 Another thing standing out from this benchmark is the huge variability
 between the different benchmark runs as shown by the Y-axis error bars.
-
 Due to these very poor initial benchmark results, we didn't attempt
 benchmark the synchronization dominated network with different problem
 sizes on the AMD-cpu.
 
 
-\section{Cycle dominated}
+\section{Compute dominated}
 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{graphs/heavy-ring2}
-\caption[Synchronization-dominated benchmark on AMD cluster]{Benchmark results for a network of 20000 processes running
+\caption[Compute dominated benchmark on AMD cluster]{Benchmark results for a network of 20000 processes running
 for 100000 iterations on the AMD cluster}
 \label{fig:heavy-ring}
 \end{figure}
@@ -215,11 +214,13 @@ The unit of work being performed by every process in every cycle is
 simply to divide a \texttt{double} floating point number by 3, 10000
 times. Since the busses in our SME-implementation only supports
 transporting integer values nothing is being done with the value calculated,
-but as long as our workload isn't being optimized away at compilation
+however, as long as our workload isn't being optimized away at compilation
 time this is irrelevant.
 
 The size of the workload and the number of nodes were chosen such that
-the running times of the benchmarks would be reasonable \fxnote{elaborate}
+the running times of the benchmarks would be reasonable. This is
+important, since benchmarks that run for a very short time produce
+less dependable results.
 
 We use floating point numbers as values as opposed to integer values
 simply because floating point operations are more expensive.
@@ -242,8 +243,8 @@ void step() {
    out->write(++val);
 }
 \end{minted}
-\caption{Code used for generating work in the cycle-dominated
-  benchmarks}
+\caption{Code used for generating work in the compute dominated
+  benchmarks.}
 \label{lst:cyclecode}
 \end{listing}
 
@@ -298,9 +299,10 @@ others.
 
 A problem with this benchmark is that the work that we perform can be
 performed entirely within the cache of a CPU-core. This allows us to
-scale more strongly than when benchmarking a problem which to a larger
-extent is limited by memory bandwidth and/or CPU-cache misses. It is,
-however, still an open question how 
+scale better than when benchmarking a problem which to a larger extent
+is limited by memory bandwidth and/or CPU-cache misses. Additional
+benchmarking is needed to determine the performance of networks that
+depends on memory accesses;
 
 \section{Weak scaling}
 In the previous benchmarks, we have investigated the strong scaling
@@ -308,7 +310,7 @@ properties of our implementation, i.e., we have kept the
 amount of work constant and varied the number of execution threads. In the
 weak scaling benchmark, we will keep the workload \textit{per thread} constant
 by performing an amount of work defined to be a fixed multiple of the
-number of threads that we use. The purpose of this benchmark, is to
+number of threads that we use. The purpose of this benchmark is to
 determine if there is a hard limit on our achievable scalability or
 whether we can scale to an "`infinite"' amount of threads simply by
 adding more work. This is what is referred to as the \textit{weak
@@ -341,7 +343,7 @@ the worker list model is still clearly visible and appears to
 increase with the level of parallelization. The statically
 orchestrated model, on the other hand, produces much better results
 and appear to show weak scaling properties with speedups within +/-
-0.05. The performance of this model, however appears to drop when
+0.05. The performance of this model appears to drop when
 going from 16 to 32 cores. This could be explained by the fact that we
 performed the benchmarks on a on a 2x16 core machine. This means, that
 CPU boundaries are crossed when we go from 16 to 32 cores.
@@ -349,27 +351,26 @@ CPU boundaries are crossed when we go from 16 to 32 cores.
 Contrary to our expectations, the work-per-cycle ratio is not clearly
 visible in the results. The explanation for this may simply be that
 the work-per-cycle ratios that we used in the benchmark weren't
-sufficiently large. In the cycle dominated benchmark we used ratios of
+sufficiently large. In the compute dominated benchmark we used ratios of
 10:1 and 1:10 respectively while in this benchmark we used, much
 smaller, ratios of
 2:1, 1:1 and 1:2.
 
 
 \section{Uneven workloads}
-This benchmark, we attempt to confirm our conjecture that the work
-list model will perform better than the statically orchestrated model
-when executing networks consisting of processes with uneven
-workloads. This benchmark essentially repeats the cycle dominated
+With this benchmark, we attempt to confirm our conjecture that the
+work list model will perform better than the statically orchestrated
+model when executing networks consisting of processes with uneven
+workloads. This benchmark essentially repeats the compute dominated
 benchmark except that we divide the processes on the ring evenly into
 two groups where one group performs exactly one fourth as much work as
 the other. So, we use the same process code as \cref{lst:cyclecode}
 except that half of the processes will only run for 2500 iterations
 instead of 10000. It's important to note that the processes in each of
 these groups are laid out sequentially on the ring, one after the
-other. The purpose of this orchestration, is to force the statically
-orchestrated model into its worst-case workload distribution.
-
-The statically orchestrated model will thus spend a lot of time in the
+other. The purpose of this orchestration is to force the statically
+orchestrated model into its worst-case workload distribution. The
+statically orchestrated model will thus spend a lot of time in the
 synchronization barrier while the work list model will be able to
 distribute load of the network much more evenly across its
 threads. This benchmark is indeed very artificial, but it serves the
@@ -390,70 +391,84 @@ than the statically orchestrated model so the fundamental conclusion
 is that our conjecture was confirmed. However, the difference between
 the two models aren't as significant as we expected. It remains to be
 seen whether the work list model would increase its advantage over the
-statically orchestrated model if we increased the workload imbalances
-between the processes even more but presumably, this would be the
-case.
+statically orchestrated model even more if we increased the workload
+imbalances. Based on the current results, however, it seems likely
+that this would be the case.
 
 This benchmark allows us to propose the interesting conjecture that if
 the light and heavy processes where placed on the ring (the benchmarked
 network) in a way that would be more optimal for the statically
 orchestrated model, then it would perform better that the
 work list model. The optimal organization would, in this case,
-probably be alternating order of light ant heavy processes but even
-randomizing the process ordering would presumably be an improvement
+probably be alternating order of light and heavy processes but even
+randomizing the process ordering would be an improvement
 over status quo.
 
 So, once again, the continuous synchronization of the work list model
 proves disproportionately expensive.
 
 \section{Future works}
+As these benchmarks has shown, it is possible to achieve significant
+speedups when executing SME in a parallelized environment. However, a
+lot of what we have concluded from the benchmarks is simply qualified
+guesses based on incomplete knowledge. Therefore, more in-depth
+testing is needed in order to confirm our conclusions. In particular,
+profiling our implementation using tools such as \texttt{gperftools}
+and \texttt{callgrind} would yield the information needed to focus
+further optimization efforts appropriately and confirm our current
+conclusions.
 
-BQueue with work stealing would be nice to implement, but as shown by
-relevant benchmark using ``advanved'' datastructures for the process
-queue comes at a significant cost. A way to implement work stealing
-without increasing the cost of getting a process from the queue is
-needed. Linearly pulling processes of a queue has a significant cache
-advantage. Using work stealing to pull from ``the reverse'' would
-reduce that advantage. 
+It should also be clears, that all of the benchmarks that we have
+performed has been largely artificial since they have been targeted at
+exposing the advantages and disadvantages of the properties of the
+execution models that we have proposed. However, they are probably a
+poor approximation of the characteristics shown by actual applications
+implemented using the SME model. Given the recent conception of the
+SME model, such applications are currently hard to come by, but
+benchmarking them would help deciding the future directions of this
+project.
 
-All benchmarks has been largely artificial since they have been
-targeted at exposing the advantages and disadvnatages of the
-properties of the execution models that we have proposed  We need more real-world
-samples to know where to actually tune the performance of system
-
-More benchmarks:
-
-
-The results that we have shown, although reasonable, can not be easily
-explained by
-
-\subsection{One-shot process orchestration}
-In this model, we orchestrate the processes in our network as soon as
-possible after execution start and
-
-\subsection{Monte Carlo orchestration}
-In this approach, we simply randomize the order of the processes. The
-main advantage of this approach is that is computationally cheap
-compared to
-
-\subsection{Optimization-based orchestration}
-Another way to orchestrate the processes is to use a
+An obvious addition to the statically orchestrated model would be to
+add a work-stealing\cite{blumofe1999scheduling} scheme such that idle
+threads could fill up their work queues with work from adjacent
+non-empty queues. However as our benchmarks has shown, that imposing
+the cost of locking on access to the work queues (as in the work list
+model), severely reduces the overall performance of the
+execution. This makes the introduction of a work stealing scheme
+challenging. Furthermore, linearly reading items from an array makes
+efficient use of CPU cache and memory prefetching advantage. Using
+work stealing to pull from ``the reverse'' would reduce that
+advantage.
 
 
-\subsection{Adaptive process orchestration}
-The benefits of using a oneshot orchestration approach diminishes when
-we execute process networks where the processes performs a variable
-amount of work per iteration. In these kinds of networks, CPU-core
-load distribution will gradually become uneven and suboptimal as the
-network execution progresses. In order to keep this from happening and
-maximize CPU-core utilization, we need to monitor process execution
-time and core idle time as the network execution progresses. This is
-what we refer to s adaptive orchestration. This approach, however
-introduces another trade-off that we need to consider. producing an
+Another possibility is to dynamically orchestrate processes across the
+queues based on their computational load. Such a system could be
+implemented by performing a "`trail run"', measuring the time each
+process uses to perform a single execution. Then the processes could be
+orchestrated across CPU threads in a way that minimizes CPU core idle
+times.
 
-\subsection{Adaptive Monte Carlo process orchestration}
-
-\subsection{Adaptive Optimization-based process orchestration}
+%\subsection{One-shot process orchestration}
+%In this model, we orchestrate the processes in our network as soon as
+%possible after execution start and
+%\subsection{Monte Carlo orchestration}
+%In this approach, we simply randomize the order of the processes. The
+%main advantage of this approach is that is computationally cheap
+%compared to
+%\subsection{Optimization-based orchestration}
+%Another way to orchestrate the processes is to use a
+%\subsection{Adaptive process orchestration}
+%The benefits of using a oneshot orchestration approach diminishes when
+%we execute process networks where the processes performs a variable
+%amount of work per iteration. In these kinds of networks, CPU-core
+%load distribution will gradually become uneven and suboptimal as the
+%network execution progresses. In order to keep this from happening and
+%maximize CPU-core utilization, we need to monitor process execution
+%time and core idle time as the network execution progresses. This is
+%what we refer to s adaptive orchestration. This approach, however
+%introduces another trade-off that we need to consider. producing an
+%\subsection{Adaptive Monte Carlo process orchestration}
+%\subsection{Adaptive Optimization-based process orchestration}
 
 
 
